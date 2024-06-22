@@ -17,6 +17,20 @@ struct Action{
     next_state: u32,
 }
 
+fn command_valid(actions:&Vec<Action>, command: &str) -> (bool, u32)
+{
+    let mut found = false;
+    let mut next_state = 0;
+    for action in actions{
+        if action.action == command{
+            found = true;
+            next_state = action.next_state;
+        }
+    }
+    
+    (found, next_state)
+}
+
 fn main() {
 
     /* Load game */
@@ -33,8 +47,11 @@ fn main() {
     println!("----META END----");
     println!("");
 
-    println!("{:?}", story["state"][0].dialogue);
-    //println!("{:?}", story["state"][0]["dialogue"]);
+    //println!("{:?}", story["state"][0].dialogue);
+    let mut story_counter = 0;
+    println!("{}", story["state"][story_counter].dialogue);
+    let actions:&Vec<Action> = &story["state"][story_counter].action;
+    println!("Available Actions: {:?}", *actions);
 
     print!("> ");
     let _ = io::stdout().flush();
@@ -43,8 +60,11 @@ fn main() {
     io::stdin().read_line(&mut input).expect("Failed to read command :(");
     let command = input.trim();
 
-    match command{
-        "hello" => println!("Hello!"),
-        _ => {},
+    let command_valid = command_valid(actions,command);
+
+    if command_valid.0{
+    //    println!("Command was valid");
+        story_counter = command_valid.1 as usize;
     }
+    println!("{}", story["state"][story_counter].dialogue);
 }
