@@ -15,9 +15,20 @@ next_state = 1
 [[state]]
 # 1
 dialogue = """
-You look around the room and find that it is empty other than a small grey cat loafing on the floor
+You look around the room and find that it is empty other than a small grey cat loafing on the floor.
 """
 
 [[state.action]]
-action = "look"
+action = "pet the cat"
+next_state = 2
+
+[[state]]
+# 2
+dialogue = """
+You petted the cat.  The volume of the cat's purr increases.  The cat looks happy.
+"""
+
+[[state.action]]
+action = "exit"
 next_state = 1
+

@@ -1,9 +1,10 @@
-use std::io;
+use std::{thread,time,io};
 use std::io::prelude::*;
 use std::fs::File;
 use std::collections::HashMap;
 use toml::{Value, de::Error};
 use serde::{Serialize, Deserialize};
+
 
 #[derive(Deserialize, Debug)]
 struct State{
@@ -31,6 +32,46 @@ fn command_valid(actions:&Vec<Action>, command: &str) -> (bool, u32)
     (found, next_state)
 }
 
+fn dramatic_print(text: &str)
+{
+    for c in text.chars(){
+        print!("{}",c);
+        let _ = io::stdout().flush();
+        let delay = time::Duration::from_millis(5);
+        thread::sleep(delay);
+    }
+}
+
+fn process_story(story: &HashMap<String, Vec<State>>)
+{
+    let mut game_active = true;
+    let mut counter = 0;
+
+    while game_active {
+        let actions:&Vec<Action> = &story["state"][counter].action;
+        
+        //println!("{}", story["state"][counter].dialogue);
+        dramatic_print(&story["state"][counter].dialogue);
+        print!("> ");
+        let _ = io::stdout().flush();
+        
+        let mut input = String::new();
+        io::stdin().read_line(&mut input).expect("Failed to read command :(");
+        let command = input.trim();
+
+        let command_valid = command_valid(actions,command);
+
+        if command == "exit"
+        {
+            game_active = false;
+        }
+        else if command_valid.0{
+        //    println!("Command was valid");
+            counter = command_valid.1 as usize;
+        }
+    }
+}
+
 fn main() {
 
     /* Load game */
@@ -42,29 +83,11 @@ fn main() {
     let story:HashMap<String, Vec<State>> = toml::from_str(&story_str).expect("Failed to deserialize toml");
     /* TODO, prettier printing */
 
+    /*
     println!("---META START---");
     println!("{:?}", story);
     println!("----META END----");
     println!("");
-
-    //println!("{:?}", story["state"][0].dialogue);
-    let mut story_counter = 0;
-    println!("{}", story["state"][story_counter].dialogue);
-    let actions:&Vec<Action> = &story["state"][story_counter].action;
-    println!("Available Actions: {:?}", *actions);
-
-    print!("> ");
-    let _ = io::stdout().flush();
-
-    let mut input = String::new();
-    io::stdin().read_line(&mut input).expect("Failed to read command :(");
-    let command = input.trim();
-
-    let command_valid = command_valid(actions,command);
-
-    if command_valid.0{
-    //    println!("Command was valid");
-        story_counter = command_valid.1 as usize;
-    }
-    println!("{}", story["state"][story_counter].dialogue);
+    */
+    process_story(&story);
 }
