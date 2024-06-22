@@ -1,5 +1,23 @@
-[state.intro]
+[[state]]
+# 0
 dialogue = """
 You materialise in a room that has no windows and no doors. A quiet vibration can be heard like the sound of a muffled car engine.
 """
 
+[[state.action]]
+action = "look"
+next_state = 1
+
+[[state.action]]
+action = "listen"
+next_state = 1
+
+[[state]]
+# 1
+dialogue = """
+You look around the room and find that it is empty other than a small grey cat loafing on the floor
+"""
+
+[[state.action]]
+action = "look"
+next_state = 1
