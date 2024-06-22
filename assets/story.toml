@@ -1,0 +1,34 @@
+[[state]]
+# 0
+dialogue = """
+You materialise in a room that has no windows and no doors. The room is an exact square with wooden floors, painted white walls and a white ceiling. The sound of a muffled car engine can be heard from the corner of the room.
+"""
+
+[[state.action]]
+action = "look"
+next_state = 1
+
+[[state.action]]
+action = "listen"
+next_state = 1
+
+[[state]]
+# 1
+dialogue = """
+You look around the room and find that it is empty other than a small grey cat loafing on the floor.
+"""
+
+[[state.action]]
+action = "pet the cat"
+next_state = 2
+
+[[state]]
+# 2
+dialogue = """
+You petted the cat.  The volume of the cat's purr increases.  The cat looks happy.
+"""
+
+[[state.action]]
+action = "exit"
+next_state = 1
+
